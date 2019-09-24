@@ -1,0 +1,40 @@
+version: "3.1"
+services:
+
+  nextcloud:
+    image: ownyourbits/nextcloudpi
+    restart: always
+    command: "192.168.1.100"
+    ports:
+      - "4443:4443"
+      - "8443:443"
+    networks:
+      - nextcloud
+    volumes:
+      - "/data/docker/nextcloudplus/:/data"
+      - "/data/smb_data/:/data/smb_data/"
+
+  samba:
+    image: dperson/samba:armhf
+    networks:
+      - default
+    environment:
+      TZ: 'Europe/Madrid'
+    ports:
+      - "137:137/udp"
+      - "138:138/udp"
+      - "139:139/tcp"
+      - "445:445/tcp"
+    read_only: true
+    tmpfs:
+      - /tmp
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    volumes:
+      - /data/smb_data/:/share
+    command: '-p -s "share;/share;yes;no;no;pi" -u "pi;rt040818"'
+
+networks:
+  nextcloud:
+  default:
