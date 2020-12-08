@@ -1,8 +1,9 @@
-version: "3.1"
+version: "3.3"
 services:
  
   nginx:
     image: nginx:1.15-alpine
+    restart: always
     ports:
       - "80:80"
       - "443:443"
@@ -78,6 +79,23 @@ services:
       - NET_ADMIN
     restart: unless-stopped
 
+  plex:
+    image: jaymoulin/plex:1.16.5
+    expose:
+      - 32400
+      - 33400
+    hostname: caliope
+    volumes:
+      - /data/docker/plex/Plex Media Server:/root/Library/Application Support/Plex Media Server
+      - /data/smb_data/General_smb/torrent/Videos:/media
+      - /data/docker/plex/tmp:/tmp
+    restart: unless-stopped
+    network_mode: "host"
+
 networks:
   nextcloud:
   default:
+  lan:
+    external:
+      name: lan
+
