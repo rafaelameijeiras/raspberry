@@ -80,7 +80,7 @@ services:
     restart: unless-stopped
 
   plex:
-    image: jaymoulin/plex:1.16.5
+    image: jaymoulin/plex
     expose:
       - 32400
       - 33400
