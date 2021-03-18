@@ -12,6 +12,22 @@ services:
     volumes:
       - /data/dotfiles/nginx/conf/default.conf:/etc/nginx/conf.d/default.conf:ro
       - /data/dotfiles/nginx/cert/:/etc/nginx/cert/
+  
+  nextcloud:
+    image: ownyourbits/nextcloudpi
+    restart: always
+    command: "192.168.1.100"
+    ports:
+      - "4443:4443"
+      - "8443:443"
+    networks:
+      - nextcloud
+    environment:
+      TZ: 'Europe/Madrid'
+      VIRTUAL_HOST: 'nextcloud.caliope.duckdns.org'
+    volumes:
+      - "/data/docker/nextcloudplus/:/data"
+      - "/data/smb_data/:/data/smb_data/"
 
   samba:
     image: dperson/samba:armhf
